@@ -4,36 +4,32 @@ import com.rtecsoft.alpha.openapi.schemaservice.api.SchemaServiceApi;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSchemaResponse;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSchemaVersionsResponse;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSubjectsResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
-@RequiredArgsConstructor
-@Service("schemaServiceV3Impl")
-public class SchemaServiceImpl implements SchemaServiceApi {
-    private @Qualifier("schemaServiceRestTemplate") final RestTemplate restTemplate;
-    private static final String SCHEMA_SERVICE_API_V1 = "/api/v1/schemas";
+@Service("schemaServiceImpl")
+public class SchemaServiceImpl {
+    private final SchemaServiceApi schemaServiceApi;
 
-    public ResponseEntity<GetSubjectsResponse> getSubjects() {
+    public SchemaServiceImpl() {
+        this.schemaServiceApi = new SchemaServiceApi();
+    }
+
+    public GetSubjectsResponse getSubjects() {
         log.info("getSubjects");
-        final String url = SCHEMA_SERVICE_API_V1 + "/subjects";
-        return restTemplate.exchange(url, HttpMethod.GET, null, GetSubjectsResponse.class);
+        var subjectsResponse = schemaServiceApi.getSubjects();
+        return subjectsResponse.block();
     }
 
-    public ResponseEntity<GetSchemaVersionsResponse> getSchemaVersions(String subject) {
+    public GetSchemaVersionsResponse getSchemaVersions(String subject) {
         log.info("getSchemaVersions");
-        final String url = SCHEMA_SERVICE_API_V1 + "/schema/versions/" + subject;
-        return restTemplate.exchange(url, HttpMethod.GET, null, GetSchemaVersionsResponse.class);
+        var response = schemaServiceApi.getSchemaVersionsBySubject(subject);
+        return response.block();
     }
 
-    public ResponseEntity<GetSchemaResponse> getSchemaBySubjectAndVersion(String subject, Integer version) {
+    public GetSchemaResponse getSchemaBySubjectAndVersion(String subject, Integer version) {
         log.info("getSchemaBySubjectAndVersion");
-        final String url = SCHEMA_SERVICE_API_V1 + "/schema/" + subject + "/" + version;
-        return restTemplate.exchange(url, HttpMethod.GET, null, GetSchemaResponse.class);
+        return schemaServiceApi.getSchemaBySubjectAndVersion(subject, version).block();
     }
 }

@@ -73,4 +73,12 @@ public class DataUtil {
         }
     }
 
+    public static  <T> boolean isResponseSuccessful(T responseType, Class<T> tClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+            var getStatusMethod = tClass.getMethod("getStatus");
+            var result = (String) getStatusMethod.invoke(responseType).toString();
+            // Add is successful to base in schema-service
+            return (Objects.equals(result, "SUCCESS"));
+
+    }
+
 }

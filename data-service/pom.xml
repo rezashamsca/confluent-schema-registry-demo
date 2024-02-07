@@ -21,6 +21,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.everit-org.json-schema/org.everit.json.schema -->
         <dependency>
             <groupId>com.github.everit-org.json-schema</groupId>
@@ -62,19 +66,20 @@
                 <version>7.1.0</version>
                 <executions>
                     <execution>
+                        <id>generate-schema-service-api-stub</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/openapi/schema-service-api.json</inputSpec>
-                            <generatorName>spring</generatorName>
+                            <generatorName>java</generatorName>
                             <apiPackage>com.rtecsoft.alpha.openapi.schemaservice.api</apiPackage>
                             <modelPackage>com.rtecsoft.alpha.openapi.schemaservice.model</modelPackage>
-                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
-                                <delegatePattern>true</delegatePattern>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <useTags>true</useTags>
+                                <library>webclient</library>
+                                <useJakartaEe>true</useJakartaEe>
                             </configOptions>
                         </configuration>
                     </execution>

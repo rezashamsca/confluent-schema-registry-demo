@@ -10,13 +10,11 @@ import com.rtecsoft.alpha.dataservice.web.resources.DataResponse;
 import com.rtecsoft.alpha.dataservice.web.resources.GetDataResponse;
 import com.rtecsoft.alpha.dataservice.web.resources.ResponseBase;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSubjectsResponse;
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -42,7 +40,7 @@ public class DataController {
                 return ResponseEntity.notFound().build();
             }
 
-            var subject = Objects.requireNonNull(subjects.getBody()).getSubjects().stream()
+            var subject = Objects.requireNonNull(subjects.getSubjects()).stream()
                     .filter(s -> s.equals(dataRequest.getSchemaSubject()))
                     .findFirst()
                     .orElse(null);
@@ -91,14 +89,15 @@ public class DataController {
 
     private Integer getLastSchemaVersion(String subject) throws Exception {
         var response = this.schemaService.getSchemaVersions(subject);
-        var allVersions = Objects.requireNonNull(response.getBody()).getSchemaVersions();
+        var allVersions = Objects.requireNonNull(response).getSchemaVersions();
 
+        assert allVersions != null;
         return allVersions.get(allVersions.size() - 1);
     }
 
 
     private String getSchema(String subject, Integer version) throws Exception {
-        return Objects.requireNonNull(schemaService.getSchemaBySubjectAndVersion(subject, version).getBody()).getSchema();
+        return Objects.requireNonNull(schemaService.getSchemaBySubjectAndVersion(subject, version)).getSchema();
     }
 
     private DataEntities processAction(DataRequest dataRequest) {
@@ -122,7 +121,7 @@ public class DataController {
             method = RequestMethod.GET,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<GetDataResponse> getData(String id) {
+    public ResponseEntity<GetDataResponse> getData(@PathVariable("id") String id) {
         var data = dataService.getData(id);
         if (data == null) {
             return ResponseEntity.notFound().build();

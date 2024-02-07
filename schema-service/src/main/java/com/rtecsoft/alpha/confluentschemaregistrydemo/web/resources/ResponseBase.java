@@ -13,4 +13,8 @@ public abstract class ResponseBase {
 
     protected Status status;
     protected String message;
+
+    public boolean isSuccess() {
+        return status == Status.SUCCESS;
+    }
 }
