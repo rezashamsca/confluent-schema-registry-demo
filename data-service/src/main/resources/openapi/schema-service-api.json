@@ -233,6 +233,9 @@
           "schemaId": {
             "type": "integer",
             "format": "int32"
+          },
+          "success": {
+            "type": "boolean"
           }
         }
       },
@@ -254,6 +257,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "success": {
+            "type": "boolean"
           }
         }
       },
@@ -272,6 +278,9 @@
           },
           "schema": {
             "type": "string"
+          },
+          "success": {
+            "type": "boolean"
           }
         }
       },
@@ -294,6 +303,9 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "success": {
+            "type": "boolean"
           }
         }
       }
