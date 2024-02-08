@@ -26,6 +26,11 @@ public class DataUtil {
         return RETURNABLE_ACTION.contains(action);
     }
 
+    public static boolean isVersionIfEmpty(DataRequest request) {
+        return isVersionIfEmpty(request.getSchemaVersion());
+    }
+
+
     public static boolean isVersionIfEmpty(Integer version) {
         return version == null || version < 1;
     }
@@ -61,23 +66,25 @@ public class DataUtil {
         return stringBuilder.toString();
     }
 
-    public static  <T> boolean isResponseSuccessful(ResponseEntity<T> responseEntity, Class<T> tClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public static <T> boolean isResponseSuccessful(ResponseEntity<T> responseEntity, Class<T> tClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             var getStatusMethod = tClass.getMethod("getStatus");
             var result = (String) getStatusMethod.invoke(responseEntity.getBody()).toString();
             // Add is successful to base in schea-service
             return (Objects.equals(result, "SUCCESS"));
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public static  <T> boolean isResponseSuccessful(T responseType, Class<T> tClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-            var getStatusMethod = tClass.getMethod("getStatus");
-            var result = (String) getStatusMethod.invoke(responseType).toString();
-            // Add is successful to base in schema-service
-            return (Objects.equals(result, "SUCCESS"));
+    public static <T> boolean isResponseSuccessful(T responseType, Class<T> tClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        if (responseType == null) {
+            return false;
+        }
+        var getStatusMethod = tClass.getMethod("getStatus");
+        var result = (String) getStatusMethod.invoke(responseType).toString();
+        // Add is successful to base in schema-service
+        return (Objects.equals(result, "SUCCESS"));
 
     }
 

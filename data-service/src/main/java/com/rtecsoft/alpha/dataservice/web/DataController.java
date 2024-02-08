@@ -10,7 +10,6 @@ import com.rtecsoft.alpha.dataservice.web.resources.DataResponse;
 import com.rtecsoft.alpha.dataservice.web.resources.GetDataResponse;
 import com.rtecsoft.alpha.dataservice.web.resources.ResponseBase;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSubjectsResponse;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,7 @@ public class DataController {
     public ResponseEntity<DataResponse> data(@RequestBody DataRequest dataRequest) throws Exception {
 
         try {
-            // Validate schema
+            // Make sure data request subject is valid
             var subjects = schemaService.getSubjects();
             if (!DataUtil.isResponseSuccessful(subjects, GetSubjectsResponse.class)) {
                 log.info("GET subjects not successful");
@@ -49,7 +48,7 @@ public class DataController {
                 return ResponseEntity.notFound().build();
             }
 
-            if (DataUtil.isVersionIfEmpty(dataRequest.getSchemaVersion())) {
+            if (DataUtil.isVersionIfEmpty(dataRequest)) {
                 dataRequest.setSchemaVersion(getLastSchemaVersion(subject));
             }
 

@@ -17,19 +17,31 @@ public class SchemaServiceImpl {
     }
 
     public GetSubjectsResponse getSubjects() {
-        log.info("getSubjects");
-        var subjectsResponse = schemaServiceApi.getSubjects();
-        return subjectsResponse.block();
+        log.info("getSubjects method");
+        return schemaServiceApi.getSubjects()
+                .onErrorResume(e -> {
+                    log.info("Error getting subjects: " + e.getMessage());
+                    return null;
+                }).block();
     }
 
     public GetSchemaVersionsResponse getSchemaVersions(String subject) {
         log.info("getSchemaVersions");
-        var response = schemaServiceApi.getSchemaVersionsBySubject(subject);
-        return response.block();
+        return schemaServiceApi.getSchemaVersionsBySubject(subject)
+                .onErrorResume(e -> {
+                    log.info("Error getting schema versions: " + e.getMessage());
+                    return null;
+                }).block();
+
     }
 
     public GetSchemaResponse getSchemaBySubjectAndVersion(String subject, Integer version) {
         log.info("getSchemaBySubjectAndVersion");
-        return schemaServiceApi.getSchemaBySubjectAndVersion(subject, version).block();
+        return schemaServiceApi.getSchemaBySubjectAndVersion(subject, version)
+                .onErrorResume(e -> {
+                    log.info("Error getting schema: " + e.getMessage());
+                    return null;
+                }).block();
+
     }
 }
