@@ -1,19 +1,25 @@
 package com.rtecsoft.alpha.dataservice.services.schema;
 
+import com.rtecsoft.alpha.openapi.schemaservice.ApiClient;
 import com.rtecsoft.alpha.openapi.schemaservice.api.SchemaServiceApi;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSchemaResponse;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSchemaVersionsResponse;
 import com.rtecsoft.alpha.openapi.schemaservice.model.GetSubjectsResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service("schemaServiceImpl")
 public class SchemaServiceImpl {
+
     private final SchemaServiceApi schemaServiceApi;
 
-    public SchemaServiceImpl() {
+    public SchemaServiceImpl(@Value("${schema-service.url}") String schemaServiceUrl) {
         this.schemaServiceApi = new SchemaServiceApi();
+        this.schemaServiceApi.getApiClient().setBasePath(schemaServiceUrl);
     }
 
     public GetSubjectsResponse getSubjects() {

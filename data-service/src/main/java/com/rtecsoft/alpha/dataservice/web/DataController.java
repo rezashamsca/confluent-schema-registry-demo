@@ -25,11 +25,11 @@ public class DataController {
     private final SchemaServiceImpl schemaService;
     private final DataService dataService;
 
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "/action",
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<DataResponse> data(@RequestBody DataRequest dataRequest) throws Exception {
+    public ResponseEntity<DataResponse> dataAction(@RequestBody DataRequest dataRequest) throws Exception {
 
         try {
             // Make sure data request subject is valid
@@ -37,6 +37,9 @@ public class DataController {
             if (!DataUtil.isResponseSuccessful(subjects, GetSubjectsResponse.class)) {
                 log.info("GET subjects not successful");
                 return ResponseEntity.notFound().build();
+            }
+            else {
+                log.debug("GET subjects successful: {}", subjects);
             }
 
             var subject = Objects.requireNonNull(subjects.getSubjects()).stream()
@@ -68,18 +71,19 @@ public class DataController {
             if (DataUtil.isReturnable(dataRequest.getAction())) {
                 assert response != null;
                 return ResponseEntity.ok(DataResponse.builder()
-                        .status(ResponseBase.Status.SUCCESS)
+                        .status(ResponseBase.StatusEnum.SUCCESS)
                         .objectId(response.get_id())
                         .build());
             } else {
                 // Return response
                 return ResponseEntity.ok(DataResponse.builder()
-                        .status(ResponseBase.Status.SUCCESS)
+                        .status(ResponseBase.StatusEnum.SUCCESS)
                         .build());
             }
         } catch (Exception e) {
+            log.error("Error processing data request: " + e.getMessage());
             return ResponseEntity.internalServerError().body(DataResponse.builder()
-                    .status(ResponseBase.Status.FAILURE)
+                    .status(ResponseBase.StatusEnum.FAILURE)
                     .message(e.getMessage())
                     .objectId("")
                     .build());
@@ -127,7 +131,7 @@ public class DataController {
         }
 
         return ResponseEntity.ok(GetDataResponse.builder()
-                .status(ResponseBase.Status.SUCCESS)
+                .status(ResponseBase.StatusEnum.SUCCESS)
                 .data(data)
                 .build());
     }
