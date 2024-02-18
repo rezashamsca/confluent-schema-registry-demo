@@ -1,4 +1,4 @@
-package com.rtecsoft.alpha;
+package com.rtecsoft.alpha.dataservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

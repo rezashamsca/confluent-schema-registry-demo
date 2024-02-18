@@ -29,7 +29,7 @@ public class DataController {
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
-    public ResponseEntity<DataResponse> dataAction(@RequestBody DataRequest dataRequest) throws Exception {
+    public ResponseEntity<DataResponse> postAction(@RequestBody DataRequest dataRequest) throws Exception {
 
         try {
             // Make sure data request subject is valid
