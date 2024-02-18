@@ -1,0 +1,25 @@
+{
+  "id" : "3d59d919-acd4-40c8-adf7-5cf3107a5193",
+  "name" : "api_v1_data_action",
+  "request" : {
+    "url" : "/api/v1/data/action",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\n\t\"id\": null,\n\t\"schemaVersion\": null,\n\t\"schemaSubject\": \"test.schema.json\",\n\t\"action\": \"create\",\n\t\"payload\": {\n\t\t\"testMessage\": \"2024-02-18\",\n    \"testNumber\": 25\n\t}\n}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"status\":\"SUCCESS\",\"message\":null,\"objectId\":\"65d234c117d2d3362f1a5af8\"}",
+    "headers" : {
+      "Keep-Alive" : "timeout=60",
+      "Date" : "Sun, 18 Feb 2024 16:48:02 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "3d59d919-acd4-40c8-adf7-5cf3107a5193",
+  "persistent" : true,
+  "insertionIndex" : 12
+}

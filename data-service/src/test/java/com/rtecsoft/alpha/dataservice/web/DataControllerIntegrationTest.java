@@ -1,28 +1,23 @@
 package com.rtecsoft.alpha.dataservice.web;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import com.rtecsoft.alpha.dataservice.util.TestUtil;
 import com.rtecsoft.alpha.dataservice.web.resources.DataRequest;
 import com.rtecsoft.alpha.dataservice.web.resources.DataResponse;
-import com.rtecsoft.alpha.openapi.schemaservice.model.GetSchemaResponse;
-import com.rtecsoft.alpha.openapi.schemaservice.model.GetSubjectsResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@WireMockTest(httpPort = 8095)
+@AutoConfigureWireMock
 @ActiveProfiles("test")
 public class DataControllerIntegrationTest {
 
@@ -31,23 +26,7 @@ public class DataControllerIntegrationTest {
 
     @Test
     public void testData() {
-        // Setup WireMock to stub the external service
-        stubFor(post(urlEqualTo("/api/v1/data/action"))
-            .willReturn(ok()
-                .withHeader("Content-Type", "application/json")
-                .withBody("{ \"status\": \"SUCCESS\", \"message\": \"\", " +
-                        "\"objectId\": \"65c41fcbdc519d4314c86dd8\" }")));
-
-        stubFor(get(urlEqualTo("/api/v1/schemas/subjects"))
-                .willReturn(ok()
-                        .withHeader("Content-Type", "application/json")
-                        .withJsonBody(getSubjectsResponse())));
-
-        stubFor(get(urlPathMatching("/api/v1/schemas/schema/.*"))
-                .willReturn(ok()
-                        .withHeader("Content-Type", "application/json")
-                        .withJsonBody(getSchemaResponse())));
-
+        // Wiremock stubs are located in src/test/resources/mappings folder
 
         // Create a request
         DataRequest request = DataRequest.builder()
@@ -68,19 +47,7 @@ public class DataControllerIntegrationTest {
 
     private static Map<String, Object> getDataPayload() {
         return Map.of(
-                "testMessage", "This is a test message",
+                "testMessage", "This is the second test message",
                 "testNumber", 30);
-    }
-
-    private static JsonNode getSubjectsResponse() {
-        return TestUtil.getObject("subjects-test.json", GetSubjectsResponse.class);
-    }
-
-    private static JsonNode getSchemaResponse() {
-        return TestUtil.getObject("schema-test.json", GetSchemaResponse.class);
-    }
-
-    private static JsonNode getPostDataInsert() {
-        return TestUtil.getObject("data-response-test.json", DataResponse.class);
     }
 }

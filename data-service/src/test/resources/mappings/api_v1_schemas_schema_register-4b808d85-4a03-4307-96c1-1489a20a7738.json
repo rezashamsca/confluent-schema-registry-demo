@@ -1,0 +1,25 @@
+{
+  "id" : "4b808d85-4a03-4307-96c1-1489a20a7738",
+  "name" : "api_v1_schemas_schema_register",
+  "request" : {
+    "url" : "/api/v1/schemas/schema/register",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\n\t\"subject\": \"test.schema.json\",\n\t\"jsonSchema\": {\n      \"$id\": \"https://com.rtecsoft.alpha/test.schema.json\",\n      \"$schema\": \"https://json-schema.org/draft-07/schema\",\n      \"title\": \"Test\",\n      \"type\": \"object\",\n      \"properties\": {\n            \"testMessage\": {\n                  \"type\": \"string\"\n            },\n            \"testNumber\": {\n                  \"type\": \"integer\",\n                  \"minimum\": 20\n            }\n      }\n}\n}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"status\":\"SUCCESS\",\"message\":null,\"schemaId\":2,\"success\":true}",
+    "headers" : {
+      "Keep-Alive" : "timeout=60",
+      "Date" : "Sun, 18 Feb 2024 16:39:13 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "4b808d85-4a03-4307-96c1-1489a20a7738",
+  "persistent" : true,
+  "insertionIndex" : 13
+}
